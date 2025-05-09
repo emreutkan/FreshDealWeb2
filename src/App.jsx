@@ -4,18 +4,12 @@ import { BrowserRouter as Router, Route, Routes } from "react-router";
 import Header from './Component/Header';
 import Footer from "./Component/Footer";
 import Home from "./pages/Home";
-import AboutUs from "./pages/About/AboutUs";
-import Blog from "./pages/About/Blog";
-import BlogCategory from "./pages/About/BlogCategory";
-import Contact from "./pages/About/Contact";
+
 import Shop from "./pages/Shop/Shop";
 import ShopDetail from "./pages/Shop/ShopDetail";
-import ShopGridCol3 from "./pages/Shop/ShopGridCol3";
-import ShopListCol from "./pages/Shop/ShopListCol";
+
 import ShopCart from "./pages/Shop/ShopCart";
 import ShopCheckOut from "./pages/Shop/ShopCheckOut";
-import ShopWishList from "./pages/Shop/ShopWishList";
-import StoreList from "./pages/store/StoreList";
 import SingleShop from "./pages/store/SingleShop";
 import MyAccountOrder from "./pages/Accounts/MyAccountOrder";
 import MyAccountSetting from "./pages/Accounts/MyAcconutSetting";
@@ -42,13 +36,10 @@ function App() {
                         {/* Shop pages */}
                         <Route path="/Shop" element={<PrivateRoute><Shop /></PrivateRoute>} />
                         <Route path="/Shop/:id" element={<ShopDetail />} />
-                        <Route path="/ShopGridCol3" element={<PrivateRoute><ShopGridCol3 /></PrivateRoute>} />
-                        <Route path="/ShopListCol" element={<PrivateRoute><ShopListCol /></PrivateRoute>} />
-                        <Route path="/ShopWishList" element={<PrivateRoute><ShopWishList /></PrivateRoute>} />
+
                         <Route path="/ShopCheckOut" element={<PrivateRoute><ShopCheckOut /></PrivateRoute>} />
                         <Route path="/ShopCart" element={<PrivateRoute><ShopCart /></PrivateRoute>} />
                         {/* Store pages */}
-                        <Route path="/StoreList" element={<PrivateRoute><StoreList /></PrivateRoute>} />
                         <Route path="/SingleShop" element={<PrivateRoute><SingleShop /></PrivateRoute>} />
                         {/* Accounts pages */}
                         <Route path="/MyAccountOrder" element={<PrivateRoute><MyAccountOrder /></PrivateRoute>} />
@@ -60,10 +51,7 @@ function App() {
                         <Route path="/MyAccountSignIn" element={<MyAccountSignIn />} />
                         <Route path="/MyAccountSignUp" element={<MyAccountSignUp />} />
                         {/* About pages */}
-                        <Route path="/Blog" element={<Blog />} />
-                        <Route path="/BlogCategory" element={<BlogCategory />} />
-                        <Route path="/Contact" element={<Contact />} />
-                        <Route path="/AboutUs" element={<AboutUs />} />
+
                         <Route path="*" element={<ErrorPage />} />
                     </Routes>
 
