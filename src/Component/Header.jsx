@@ -8,12 +8,13 @@ import FreshDealLogo from "../images/FreshDealLogo.png";
 const Header = () => {
     const dispatch = useDispatch();
     const { cartItems } = useSelector((state) => state.cart);
-    const { authToken } = useSelector((state) => state.user);
+    const { authToken, name_surname } = useSelector((state) => state.user);
 
     useEffect(() => {
         if (authToken) {
             dispatch(fetchCart());
         }
+        console.log("Header - Auth Token:", authToken);
     }, [authToken, dispatch]);
 
     const handleLogout = () => {
@@ -28,6 +29,9 @@ const Header = () => {
             <div className="header-actions d-flex align-items-center">
                 {authToken ? (
                     <>
+                        <div className="me-3 text-dark">
+                            <span>Welcome, {name_surname || 'User'}</span>
+                        </div>
                         <div className="me-3">
                             <Link
                                 className="text-muted position-relative"
