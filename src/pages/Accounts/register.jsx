@@ -3,7 +3,7 @@ import signupimage from '@src/images/signup-g.svg'
 import { Link } from "react-router";
 import ScrollToTop from "../ScrollToTop";
 
-const MyAccountSignUp = () => {
+const Register = () => {
   return (
     <div>
        <>
@@ -81,7 +81,7 @@ const MyAccountSignUp = () => {
                       <span className="navbar-text">
                           Already have an account?{" "}
 
-                          <Link to="/MyAccountSignIn">Sign in</Link>
+                          <Link to="/Login">Sign in</Link>
                         </span>
                     </div>
                     {/* text */}
@@ -103,4 +103,4 @@ const MyAccountSignUp = () => {
   );
 };
 
-export default MyAccountSignUp;
+export default Register;

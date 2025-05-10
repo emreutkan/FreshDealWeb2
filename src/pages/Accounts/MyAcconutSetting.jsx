@@ -280,20 +280,8 @@ const MyAcconutSetting = () => {
                     Address
                   </a>
                 </li>
-                {/* nav item */}
-                <li className="nav-item">
-                  <a className="nav-link" href="/MyAcconutPaymentMethod">
-                    <i className="fas fa-credit-card me-2" />
-                    Payment Method
-                  </a>
-                </li>
-                {/* nav item */}
-                <li className="nav-item">
-                  <a className="nav-link" href="/MyAcconutNotification">
-                    <i className="fas fa-bell me-2" />
-                    Notification
-                  </a>
-                </li>
+
+
               </ul>
               <hr className="my-6" />
               <div>
