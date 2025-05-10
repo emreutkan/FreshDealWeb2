@@ -9,17 +9,24 @@ export const loginUserThunk = createAsyncThunk(
     async (payload, { dispatch, rejectWithValue }) => {
         try {
             const response = await authApi.login(payload);
-            console.log(response);
+            console.log("Login API response:", response);
 
             if (response.token) {
+                // Save token to Redux state
                 dispatch(setToken(response.token));
+
+                // Also save token to localStorage via tokenService
+                await tokenService.setToken(response.token);
+
+                console.log("Token after setting:", response.token);
+
+                // Get user data with the token
                 await dispatch(getUserDataThunk({ token: response.token }));
             }
 
-            console.log(response);
             return response;
         } catch (error) {
-            console.log(error);
+            console.log("Login error:", error);
             return rejectWithValue(error.response?.data || "Login failed");
         }
     }

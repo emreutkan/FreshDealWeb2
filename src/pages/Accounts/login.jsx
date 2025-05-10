@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import signinimage from "@src/images/signin-g.svg";
 import { Link, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,7 +8,8 @@ import ScrollToTop from "../ScrollToTop";
 const MyAccountSignIn = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isLoading, error, token } = useSelector((state) => state.user);
+  const userState = useSelector((state) => state.user);
+  const { isLoading, error, token } = userState;
 
   const [loginType, setLoginType] = useState("email"); // Toggle between email and phone
   const [formData, setFormData] = useState({
@@ -16,6 +17,15 @@ const MyAccountSignIn = () => {
     phone_number: "",
     password: "",
   });
+
+  // Debug - Log token state when component mounts and when token changes
+  useEffect(() => {
+    console.log("Login Component - Initial Token State:", token);
+  }, []);
+
+  useEffect(() => {
+    console.log("Login Component - Token Changed:", token);
+  }, [token]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,8 +41,19 @@ const MyAccountSignIn = () => {
       password_login: true, // Assuming password-based login
     };
 
+    console.log("Login - Before dispatch - User State:", userState);
     const result = await dispatch(loginUserThunk(payload));
+    console.log("Login - After dispatch - Auth Result:", result);
+
+    // We need to get the current state AFTER the dispatch
+    const currentToken = result.payload?.token;
+    console.log("Login - After dispatch - Token:", currentToken);
+
     if (result.payload?.success) {
+      console.log("Login Successful - Token before navigation:", currentToken);
+      // Store debugging info in sessionStorage to track token across page navigations
+      sessionStorage.setItem('lastLoginToken', currentToken);
+      sessionStorage.setItem('loginTimestamp', new Date().toISOString());
       navigate("/dashboard"); // Forwarding user upon successful login
     }
   };
@@ -114,7 +135,7 @@ const MyAccountSignIn = () => {
                     ) : (
                         <div className="col-12">
                           <input
-                              type="text"
+                              type="tel"
                               className="form-control"
                               id="inputPhone"
                               name="phone_number"
@@ -140,44 +161,24 @@ const MyAccountSignIn = () => {
                       />
                     </div>
 
-                    <div className="d-flex justify-content-between">
-                      <div className="form-check">
-                        <input
-                            className="form-check-input"
-                            type="checkbox"
-                            id="flexCheckDefault"
-                        />
-                        <label
-                            className="form-check-label"
-                            htmlFor="flexCheckDefault"
-                        >
-                          Remember me
-                        </label>
-                      </div>
-                      <div>
-                        Forgot password?{" "}
-                        <Link to="/MyAccountForgetPassword">Reset it</Link>
-                      </div>
-                    </div>
+                    {/* Error display */}
+                    {error && (
+                        <div className="col-12">
+                          <div className="alert alert-danger" role="alert">
+                            {error}
+                          </div>
+                        </div>
+                    )}
 
-                    {/* Error message */}
-                    {error && <p className="text-danger">{error}</p>}
-
-                    {/* Sign In button */}
-                    <div className="col-12 d-grid">
+                    {/* Submit button */}
+                    <div className="col-12">
                       <button
                           type="submit"
-                          className="btn btn-primary"
+                          className="btn btn-primary w-100"
                           disabled={isLoading}
                       >
                         {isLoading ? "Signing In..." : "Sign In"}
                       </button>
-                    </div>
-
-                    {/* Sign Up link */}
-                    <div>
-                      Don’t have an account?{" "}
-                      <Link to="/Register">Sign Up</Link>
                     </div>
                   </div>
                 </form>

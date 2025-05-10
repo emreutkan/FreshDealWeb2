@@ -268,7 +268,7 @@ const AddressSelection = () => {
                         onClick={handleClick}
                         onLoad={handleMapLoad}
                         style={mapContainerStyle}
-                        gestureHandling="cooperative"
+                        gestureHandling="greedy"
                         disableDefaultUI={false}
                         scrollwheel={true}
                         zoomControl={true}
