@@ -17,12 +17,14 @@ export const tokenService = {
             const storedToken = localStorage.getItem(TOKEN_KEY);
 
             if (storedToken) {
-                return validateToken(storedToken);
+                return storedToken;
             }
 
             if (tokenManager) {
                 const stateToken = tokenManager.getStateToken();
-                return validateToken(stateToken);
+                if (stateToken) {
+                    return stateToken;
+                }
             }
 
             console.warn('No token found and no token manager available');

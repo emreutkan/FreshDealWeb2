@@ -12,11 +12,10 @@ import ShopCart from "./pages/Shop/ShopCart";
 import ShopCheckOut from "./pages/Shop/ShopCheckOut";
 import MyAccountOrder from "./pages/Accounts/MyAccountOrder";
 import MyAccountSetting from "./pages/Accounts/MyAcconutSetting";
-import MyAccountAddress from "./pages/Accounts/MyAccountAddress";
+import AddressSelection from "./pages/Accounts/AddressSelection.jsx";
 import MyAccountForgetPassword from "./pages/Accounts/MyAccountForgetPassword";
 import Login from "./pages/Accounts/login.jsx";
 import Register from "./pages/Accounts/register.jsx";
-import PrivateRoute from './PrivateRoute';
 import ErrorPage from "@src/pages/ErrorPage";
 import GlobalResetContext from "@src/context/GlobalResetContext";
 
@@ -30,13 +29,13 @@ function App() {
 
                     <Routes key={resetKey}>
                         <Route path="/" element={<Home />} />
-                        <Route path="/Restaurants" element={<PrivateRoute><Shop /></PrivateRoute>} />
+                        <Route path="/Restaurants" element={<Shop />} />
                         <Route path="/Restaurant/:id" element={<ShopDetail />} />
-                        <Route path="/CheckOut" element={<PrivateRoute><ShopCheckOut /></PrivateRoute>} />
-                        <Route path="/Cart" element={<PrivateRoute><ShopCart /></PrivateRoute>} />
-                        <Route path="/MyAccountOrder" element={<PrivateRoute><MyAccountOrder /></PrivateRoute>} />
-                        <Route path="/MyAccountSetting" element={<PrivateRoute><MyAccountSetting /></PrivateRoute>} />
-                        <Route path="/Address" element={<PrivateRoute><MyAccountAddress /></PrivateRoute>} />
+                        <Route path="/CheckOut" element={<><ShopCheckOut /></>} />
+                        <Route path="/Cart" element={<><ShopCart /></>} />
+                        <Route path="/MyAccountOrder" element={<><MyAccountOrder /></>} />
+                        <Route path="/MyAccountSetting" element={<><MyAccountSetting /></>} />
+                        <Route path="/Address" element={<><AddressSelection /></>} />
                         <Route path="/MyAccountForgetPassword" element={<MyAccountForgetPassword />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/Register" element={<Register />} />

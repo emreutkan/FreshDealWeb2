@@ -323,7 +323,7 @@ function Dropdown() {
                     </div>
                 </>
                 ) : (
-                <Link to="/MyAccountAddress" className="me-3">
+                <Link to="/AddressSelection" className="me-3">
                     Please add an address to see nearby restaurants.
                 </Link>
                 )

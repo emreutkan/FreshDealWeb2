@@ -69,7 +69,7 @@ const MyAcconutSetting = () => {
                       </li>
                       {/* nav item */}
                       <li className="nav-item">
-                        <Link className="nav-link" to="/MyAccountAddress">
+                        <Link className="nav-link" to="/AddressSelection">
                           <i className="fas fa-map-marker-alt me-2" />
                           Address
                         </Link>
@@ -275,7 +275,7 @@ const MyAcconutSetting = () => {
                 </li>
                 {/* nav item */}
                 <li className="nav-item">
-                  <a className="nav-link" href="/MyAccountAddress">
+                  <a className="nav-link" href="/src/pages/Accounts/AddressSelection">
                     <i className="fas fa-map-marker-alt me-2" />
                     Address
                   </a>
