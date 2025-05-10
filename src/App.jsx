@@ -1,8 +1,8 @@
 import React, { useContext, useState } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router";
-import Header from './Component/Header';
-import Footer from "./Component/Footer";
+import Header from '@src/components/Header';
+import Footer from "@src/components/Footer";
 import Home from "./pages/Home";
 
 import Shop from "./pages/Shop/Shop";
@@ -12,7 +12,7 @@ import ShopCart from "./pages/Shop/ShopCart";
 import ShopCheckOut from "./pages/Shop/ShopCheckOut";
 import MyAccountOrder from "./pages/Accounts/MyAccountOrder";
 import MyAccountSetting from "./pages/Accounts/MyAcconutSetting";
-import AddressSelection from "./pages/Accounts/AddressSelection.jsx";
+import AddressSelection from "./pages/AddressSelection.jsx";
 import MyAccountForgetPassword from "./pages/Accounts/MyAccountForgetPassword";
 import Login from "./pages/Accounts/login.jsx";
 import Register from "./pages/Accounts/register.jsx";

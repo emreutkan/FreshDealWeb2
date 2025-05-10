@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
-import ScrollToTop from "../ScrollToTop";
+import ScrollToTop from "@src/pages/ScrollToTop";
 import { APIProvider, Map, Marker, useMap } from "@vis.gl/react-google-maps";
 import { useDispatch, useSelector } from "react-redux";
 import {addAddressAsync} from "@src/redux/thunks/addressThunks";

@@ -54,7 +54,7 @@ const MyAccountSignIn = () => {
       // Store debugging info in sessionStorage to track token across page navigations
       sessionStorage.setItem('lastLoginToken', currentToken);
       sessionStorage.setItem('loginTimestamp', new Date().toISOString());
-      navigate("/dashboard"); // Forwarding user upon successful login
+      navigate("/"); // Forwarding user upon successful login
     }
   };
 
