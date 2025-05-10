@@ -1,6 +1,7 @@
 import {createContext, useState, useEffect} from "react";
 import { useDispatch } from 'react-redux';
 import { tokenService, initializeTokenService } from '../services/tokenService';
+import { getUserDataThunk } from '../redux/thunks/userThunks';
 
 const AuthContext = createContext();
 
@@ -31,6 +32,9 @@ const AuthProvider = ({ children }) => {
         if (storedToken) {
             setAuthToken(storedToken);
             dispatch({ type: 'user/setToken', payload: storedToken });
+
+            // Fetch user data on initialization when token exists
+            dispatch(getUserDataThunk({ token: storedToken }));
         }
     }, [dispatch]);
 

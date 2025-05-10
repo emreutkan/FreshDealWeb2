@@ -1,21 +1,36 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCart } from "@src/redux/thunks/cartThunks";
-import { logoutUserThunk } from "@src/redux/thunks/userThunks";
+import { logoutUserThunk, getUserDataThunk } from "@src/redux/thunks/userThunks";
 import FreshDealLogo from "../images/FreshDealLogo.png";
+import { tokenService } from "@src/services/tokenService.js";
 
 const Header = () => {
     const dispatch = useDispatch();
     const { cartItems } = useSelector((state) => state.cart);
-    const { authToken, name_surname } = useSelector((state) => state.user);
+    const { token, name_surname, isAuthenticated } = useSelector((state) => state.user);
+    const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
-        if (authToken) {
+        const initializeUser = async () => {
+            const storedToken = await tokenService.getToken();
+            if (storedToken) {
+                dispatch(getUserDataThunk({ token: storedToken }));
+                dispatch(fetchCart());
+            }
+            setIsLoaded(true);
+        };
+
+        initializeUser();
+        console.log("Header - Auth Token:", token);
+    }, [dispatch]);
+
+    useEffect(() => {
+        if (token) {
             dispatch(fetchCart());
         }
-        console.log("Header - Auth Token:", authToken);
-    }, [authToken, dispatch]);
+    }, [token, dispatch]);
 
     const handleLogout = () => {
         dispatch(logoutUserThunk());
@@ -27,7 +42,7 @@ const Header = () => {
                 <img src={FreshDealLogo} style={{ width: 120 }} alt="FreshDeal Logo" />
             </Link>
             <div className="header-actions d-flex align-items-center">
-                {authToken ? (
+                {(token || isAuthenticated) ? (
                     <>
                         <div className="me-3 text-dark">
                             <span>Welcome, {name_surname || 'User'}</span>
