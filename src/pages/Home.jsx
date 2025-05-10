@@ -218,15 +218,13 @@ function Home() {
                                                 >
                                                     <div
                                                         className="ps-lg-12 py-lg-16 col-xxl-5 col-md-7 py-14 px-8 text-xs-center">
-                                                        <span className="badge text-bg-warning">
-                                                            Opening Sale Discount 50%
-                                                        </span>
+
                                                         <h2 className="text-dark display-5 fw-bold mt-4">
-                                                            SuperMarket Daily <br/> Fresh Grocery
+                                                           Fresh Deal
                                                         </h2>
                                                         <p className="lead">
-                                                            Introduced a new model for online grocery shopping
-                                                            and convenient home delivery.
+                                                            we are a food waste app that connects users with local businesses
+                                                            to buy surplus food at discounted prices.
                                                         </p>
                                                         <Link to="#!" className="btn btn-dark mt-3">
                                                             Shop Now{" "}
@@ -246,16 +244,12 @@ function Home() {
                                                 >
                                                     <div
                                                         className="ps-lg-12 py-lg-16 col-xxl-5 col-md-7 py-14 px-8 text-xs-center">
-                                                        <span className="badge text-bg-warning">
-                                                            Free Shipping - orders over $100
-                                                        </span>
+
                                                         <h2 className="text-dark display-5 fw-bold mt-4">
-                                                            Free Shipping on <br/> orders over{" "}
-                                                            <span className="text-primary">$100</span>
+                                                            Order Here
                                                         </h2>
                                                         <p className="lead">
-                                                            Free Shipping to First-Time Customers Only, After
-                                                            promotions and discounts are applied.
+                                                            We want to make it easy for you to find the best deals on FreshDeal
                                                         </p>
                                                         <Link to="#!" className="btn btn-dark mt-3">
                                                             Shop Now{" "}
@@ -388,108 +382,7 @@ function Home() {
                                 </div>
                             </section>
                         </>
-                        <>
-                            <section className="my-lg-14 my-8">
-                                <div className="container" style={{ marginTop: 50 }}>
-                                    <div
-                                        className="row justify-content-center  g-4"
-                                        style={{textAlign: "center"}}
-                                    >
-                                        <div className="col-md-3 col-sm-6 fade-zoom ">
-                                            <Zoom>
-                                                <div className="shadow-effect">
-                                                    <div
-                                                        className="wt-icon-box-wraper center p-a25 p-b50 m-b30 bdr-1 bdr-gray bdr-solid corner-radius step-icon-box bg-white v-icon-effect">
-                                                        <div className="icon-lg m-b20">
-                                                            <div className="mb-6">
-                                                                <img src={refresh} alt="refresh"/>
-                                                            </div>
-                                                        </div>
-                                                        <div className="icon-content">
-                                                            <h3 className="h5 mb-3">Easy Returns</h3>
-                                                            <p>
-                                                                Not satisfied with a product? Return it at the
-                                                                doorstep &amp; get a refund within hours. No
-                                                                questions asked
-                                                                <Link to="#!">policy</Link>.
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </Zoom>
-                                        </div>
-                                        <div className="col-md-3 col-sm-12 fade-zoom">
-                                            <Zoom>
-                                                <div className="shadow-effect">
-                                                    <div
-                                                        className="wt-icon-box-wraper center p-a25 p-b50 m-b30 bdr-1 bdr-gray bdr-solid corner-radius step-icon-box bg-white v-icon-effect">
-                                                        <div className="icon-lg m-b20">
-                                                            <div className="mb-6">
-                                                                <img src={package1} alt="package"/>
-                                                            </div>
-                                                        </div>
-                                                        <div className="icon-content">
-                                                            <h3 className="h5 mb-3">Wide Assortment</h3>
-                                                            <p>
-                                                                Choose from 5000+ products across food, personal
-                                                                care, household, bakery, veg and non-veg &amp;
-                                                                other categories.
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </Zoom>
-                                        </div>
-                                        <div className="col-md-3 col-sm-12 fade-zoom">
-                                            <Zoom>
-                                                <div className="shadow-effect">
-                                                    <div
-                                                        className="wt-icon-box-wraper center p-a25 p-b50 m-b30 bdr-1 bdr-gray bdr-solid corner-radius step-icon-box bg-white v-icon-effect">
-                                                        <div className="icon-lg m-b20">
-                                                            <div className="mb-6">
-                                                                <img src={gift} alt="gift"/>
-                                                            </div>
-                                                        </div>
-                                                        <div className="icon-content">
-                                                            <h3 className="h5 mb-3">
-                                                                Best Prices &amp; Offers
-                                                            </h3>
-                                                            <p>
-                                                                Cheaper prices than your local supermarket,
-                                                                great cashback offers to top it off. Get best
-                                                                pricess &amp; offers.
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </Zoom>
-                                        </div>
-                                        <div className="col-md-3 col-sm-12 fade-zoom">
-                                            <Zoom>
-                                                <div className="shadow-effect">
-                                                    <div
-                                                        className="wt-icon-box-wraper center p-a25 p-b50 m-b30 bdr-1 bdr-gray bdr-solid corner-radius step-icon-box bg-white v-icon-effect">
-                                                        <div className="icon-lg m-b20">
-                                                            <div className="mb-6">
-                                                                <img src={clock} alt="clock"/>
-                                                            </div>
-                                                        </div>
-                                                        <div className="icon-content">
-                                                            <h3 className="h5 mb-3">10 minute grocery now</h3>
-                                                            <p>
-                                                                Get your order delivered to your doorstep at the
-                                                                earliest from FreshCart pickup
-                                                                 stores near you.
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </Zoom>
-                                        </div>
-                                    </div>
-                                </div>
-                            </section>
-                        </>
+
 
                     </>
                 )}

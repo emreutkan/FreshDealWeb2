@@ -27,10 +27,12 @@ function Footer() {
                                         </Link>
                                     </div>
                                     <p className="mb-30">
-                                        We deliver more than your expectations and help you to grow
-                                        your business exponentially by providing customized
-                                        applications. So, don’t just think, get ready to convert
-                                        your ideas into reality.
+
+                                        We are a team of passionate individuals who believe in the power of technology
+                                        to make a positive impact on the world. Our mission is to help you save money
+                                        and reduce food waste
+                                        while enjoying delicious meals from your favorite local restaurants.
+
                                     </p>
                                 </div>
                                 <div className="dimc-protect">

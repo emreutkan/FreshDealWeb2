@@ -26,6 +26,7 @@ export const tokenService = {
             }
 
             console.warn('No token found and no token manager available');
+            return null;
         } catch (error) {
             throw error;
         }

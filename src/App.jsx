@@ -10,7 +10,6 @@ import ShopDetail from "./pages/Shop/ShopDetail";
 
 import ShopCart from "./pages/Shop/ShopCart";
 import ShopCheckOut from "./pages/Shop/ShopCheckOut";
-import SingleShop from "./pages/store/SingleShop";
 import MyAccountOrder from "./pages/Accounts/MyAccountOrder";
 import MyAccountSetting from "./pages/Accounts/MyAcconutSetting";
 import MyAccountAddress from "./pages/Accounts/MyAccountAddress";
@@ -31,22 +30,16 @@ function App() {
 
                     <Routes key={resetKey}>
                         <Route path="/" element={<Home />} />
-                        {/* Shop pages */}
-                        <Route path="/Shop" element={<PrivateRoute><Shop /></PrivateRoute>} />
-                        <Route path="/Shop/:id" element={<ShopDetail />} />
-
-                        <Route path="/ShopCheckOut" element={<PrivateRoute><ShopCheckOut /></PrivateRoute>} />
-                        <Route path="/ShopCart" element={<PrivateRoute><ShopCart /></PrivateRoute>} />
-                        {/* Store pages */}
-                        <Route path="/SingleShop" element={<PrivateRoute><SingleShop /></PrivateRoute>} />
-                        {/* Accounts pages */}
+                        <Route path="/Restaurants" element={<PrivateRoute><Shop /></PrivateRoute>} />
+                        <Route path="/Restaurant/:id" element={<ShopDetail />} />
+                        <Route path="/CheckOut" element={<PrivateRoute><ShopCheckOut /></PrivateRoute>} />
+                        <Route path="/Cart" element={<PrivateRoute><ShopCart /></PrivateRoute>} />
                         <Route path="/MyAccountOrder" element={<PrivateRoute><MyAccountOrder /></PrivateRoute>} />
                         <Route path="/MyAccountSetting" element={<PrivateRoute><MyAccountSetting /></PrivateRoute>} />
                         <Route path="/Address" element={<PrivateRoute><MyAccountAddress /></PrivateRoute>} />
                         <Route path="/MyAccountForgetPassword" element={<MyAccountForgetPassword />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/Register" element={<Register />} />
-                        {/* About pages */}
 
                         <Route path="*" element={<ErrorPage />} />
                     </Routes>
