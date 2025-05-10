@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import ScrollToTop from "../ScrollToTop";
 import { APIProvider, Map, Marker, useMap } from "@vis.gl/react-google-maps";
 import { useDispatch, useSelector } from "react-redux";
@@ -50,7 +50,6 @@ const LocationButton = () => {
           title="My Location"
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-          <path d="M8 0a.5.5 0 0 1 .5.5v.518A7 7 0 0 1 14.982 7.5h.518a.5.5 0 0 1 0 1h-.518A7 7 0 0 1 8.5 14.982v.518a.5.5 0 0 1-1 0v-.518A7 7 0 0 1 1.018 8.5H.5a.5.5 0 0 1 0-1h.518A7 7 0 0 1 7.5 1.018V.5A.5.5 0 0 1 8 0zm0 2a6 6 0 1 0 0 12A6 6 0 0 0 8 2zM8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
         </svg>
       </button>
   );
@@ -64,14 +63,9 @@ const AddressSelection = () => {
   const token = useSelector((state) => state.user.token);
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
 
-  // loading
-  const [, setLoaderStatus] = useState(true);
-  useEffect(() => {
-    setTimeout(() => {
-      setLoaderStatus(false);
-    }, 1500);
-  }, []);
-
+  // States for component
+  const [redirectToLogin, setRedirectToLogin] = useState(false);
+  const [loaderStatus, setLoaderStatus] = useState(true);
   const [coordinates, setCoordinates] = useState({ lat: 39.92077, lng: 32.85411 });
   const [addressData, setAddressData] = useState(null);
   const [apartmentNo, setApartmentNo] = useState(null);
@@ -79,57 +73,72 @@ const AddressSelection = () => {
   const [selectedAddressId, setSelectedAddressId] = useState(null);
   const [mapInitialized, setMapInitialized] = useState(false);
 
-  // Redirect if not authenticated
-  if (!token || !isAuthenticated) {
-    return <Navigate to="/Login" />;
-  }
-
+  // Check authentication on component mount
   useEffect(() => {
-    // Listen for location updates from the LocationButton component
-    const handleLocationUpdated = (event) => {
-      if (event.detail && event.detail.latLng) {
-        setCoordinates(event.detail.latLng);
-        getAddressFromCoordinates(event.detail.latLng.lat, event.detail.latLng.lng);
-      }
-    };
+    console.log("Address Selection - Authentication check:", { token, isAuthenticated });
+          if (!token || !isAuthenticated) {
+          setRedirectToLogin(true);
+        }
+          }, [token, isAuthenticated]);
 
-    window.addEventListener('locationUpdated', handleLocationUpdated);
+          // Loading effect
+          useEffect(() => {
+          setTimeout(() => {
+            setLoaderStatus(false);
+          }, 1500);
+        }, []);
 
-    return () => {
-      window.removeEventListener('locationUpdated', handleLocationUpdated);
-    };
-  }, []);
+          // Listen for location updates
+          useEffect(() => {
+          const handleLocationUpdated = (event) => {
+          if (event.detail && event.detail.latLng) {
+          setCoordinates(event.detail.latLng);
+          getAddressFromCoordinates(event.detail.latLng.lat, event.detail.latLng.lng);
+        }
+        };
 
-  useEffect(() => {
-    if (mapInitialized && coordinates) {
-      getAddressFromCoordinates(coordinates.lat, coordinates.lng);
-    }
-  }, [mapInitialized]);
+          window.addEventListener('locationUpdated', handleLocationUpdated);
 
-  const handleMapLoad = () => {
-    setMapInitialized(true);
-  };
+          return () => {
+          window.removeEventListener('locationUpdated', handleLocationUpdated);
+        };
+        }, []);
 
-  const handleClick = (event) => {
-    const lat = event.detail.latLng.lat;
-    const lng = event.detail.latLng.lng;
-    setCoordinates({ lat, lng });
-    getAddressFromCoordinates(lat, lng);
-  };
+          // Initialize map
+          useEffect(() => {
+          if (mapInitialized && coordinates) {
+          getAddressFromCoordinates(coordinates.lat, coordinates.lng);
+        }
+        }, [mapInitialized]);
 
-  const getAddressFromCoordinates = async (lat, lng) => {
-    try {
-      const response = await fetch(
+          if (redirectToLogin) {
+          return <Navigate to="/Login" />;
+        }
+
+          const handleMapLoad = () => {
+          setMapInitialized(true);
+        };
+
+          const handleClick = (event) => {
+          const lat = event.detail.latLng.lat;
+          const lng = event.detail.latLng.lng;
+          setCoordinates({ lat, lng });
+          getAddressFromCoordinates(lat, lng);
+        };
+
+          const getAddressFromCoordinates = async (lat, lng) => {
+          try {
+          const response = await fetch(
           `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`
-      );
-      const data = await response.json();
+          );
+          const data = await response.json();
 
-      if (data.status === "OK" && data.results && data.results.length > 0) {
-        const result = data.results[0];
-        const addressComponents = result.address_components || [];
+          if (data.status === "OK" && data.results && data.results.length > 0) {
+          const result = data.results[0];
+          const addressComponents = result.address_components || [];
 
-        // Extract each component properly
-        const formattedAddress = {
+          // Extract each component properly
+          const formattedAddress = {
           title: "Home",
           longitude: lng,
           latitude: lat,
@@ -144,264 +153,252 @@ const AddressSelection = () => {
           isPrimary: true,
           formattedAddress: result.formatted_address || ""
         };
-        setAddressData(formattedAddress);
-      } else {
-        setAddressData({
+          setAddressData(formattedAddress);
+        } else {
+          setAddressData({
           error: `Address could not be retrieved. Error: ${data.status}`
         });
-      }
-    } catch (error) {
-      setAddressData({ error: "An error occurred: " + error.message });
-    }
-  };
+        }
+        } catch (error) {
+          setAddressData({ error: "An error occurred: " + error.message });
+        }
+        };
 
-  const extractAddressComponent = (components, types) => {
-    if (!components || !Array.isArray(components)) return null;
+          const extractAddressComponent = (components, types) => {
+          if (!components || !Array.isArray(components)) return null;
 
-    for (const type of types) {
-      const component = components.find(comp =>
+          for (const type of types) {
+          const component = components.find(comp =>
           comp.types && comp.types.includes(type)
-      );
+          );
 
-      if (component) {
-        return component.long_name;
-      }
-    }
+          if (component) {
+          return component.long_name;
+        }
+        }
 
-    return null;
-  };
+          return null;
+        };
 
-  const saveAddress = async () => {
-    if (!token) {
-      return <Navigate to="/Login" />;
-    }
+          const saveAddress = async () => {
+          if (!token) {
+          setRedirectToLogin(true);
+          return;
+        }
 
-    const addressPayload = {
-      ...addressData,
-      token
-    };
+          const addressPayload = {
+          ...addressData,
+          token
+        };
 
-    dispatch(addAddressAsync(addressPayload));
-  }
+          dispatch(addAddressAsync(addressPayload));
+        }
 
-  const selectAddress = (addressId) => {
-    setSelectedAddressId(addressId);
-    const selectedAddress = addresses.find(address => address.id === addressId);
-    if (selectedAddress) {
-      setCoordinates({
-        lat: selectedAddress.latitude || 39.92077,
-        lng: selectedAddress.longitude || 32.85411
-      });
-    }
-  };
+          const selectAddress = (addressId) => {
+          setSelectedAddressId(addressId);
+          const selectedAddress = addresses.find(address => address.id === addressId);
+          if (selectedAddress) {
+          setCoordinates({
+          lat: selectedAddress.latitude || 39.92077,
+          lng: selectedAddress.longitude || 32.85411
+        });
+        }
+        };
 
-  return (
-      <div>
-        <ScrollToTop/>
-        <div className="address-selection-container">
-          <div className="container py-5">
-            <div className="row">
-              <div className="col-12 mb-4">
-                <h2 className="address-title">Manage Your Addresses</h2>
-                <p className="address-subtitle">Select a location on the map or choose from your saved addresses</p>
-              </div>
-            </div>
+          return (
+          <div>
+            <ScrollToTop/>
+            <div className="address-selection-container">
+              <div className="container py-5">
+                <div className="row">
+                  <div className="col-12 mb-4">
+                    <h2 className="address-title">Manage Your Addresses</h2>
+                    <p className="address-subtitle">Select a location on the map or choose from your saved addresses</p>
+                  </div>
+                </div>
 
-            <div className="row">
-              {/* Address List Sidebar */}
-              <div className="col-lg-4 mb-4">
-                <div className="address-sidebar">
-                  <div className="sidebar-header">
-                    <h3>Your Addresses</h3>
-                    {addresses.length === 0 && (
-                        <div className="no-addresses">
-                          <p>You don't have any saved addresses yet.</p>
-                          <p>Click on the map to add your first address.</p>
+                <div className="row">
+                  {/* Address List Sidebar */}
+                  <div className="col-lg-4 mb-4">
+                    <div className="address-sidebar">
+                      <div className="sidebar-header">
+                        <h3>Your Addresses</h3>
+                        {addresses.length === 0 && (
+                            <div className="no-addresses">
+                              <p>You don't have any saved addresses yet.</p>
+                              <p>Click on the map to add your first address.</p>
+                            </div>
+                        )}
+                      </div>
+
+                      <div className="address-list">
+                        {addresses.map((address) => (
+                            <div
+                                className={`address-card ${selectedAddressId === address.id ? 'selected' : ''}`}
+                                key={address.id}
+                                onClick={() => selectAddress(address.id)}
+                            >
+                              <div className="address-card-content">
+                                <div className="address-card-header">
+                                  <h4>{address.title}</h4>
+                                  {address.is_primary && <span className="primary-badge">Primary</span>}
+                                </div>
+                                <div className="address-card-body">
+                                  <p>{address.street}, {address.neighborhood}</p>
+                                  <p>{address.district}, {address.province}</p>
+                                  <p>{address.country}, {address.postalCode}</p>
+                                  {(address.apartmentNo || address.doorNo) && (
+                                      <p className="address-details">
+                                        {address.apartmentNo && `Apt ${address.apartmentNo}`}
+                                        {address.apartmentNo && address.doorNo && ', '}
+                                        {address.doorNo && `Door ${address.doorNo}`}
+                                      </p>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Map and Address Form */}
+                  <div className="col-lg-8">
+                    <div className="map-container">
+                      <div className="map-instructions">
+                        <i className="bi bi-geo-alt"></i>
+                        <span>Click anywhere on the map to set your address</span>
+                      </div>
+
+                      <APIProvider apiKey={apiKey}>
+                        <Map
+                            onClick={handleClick}
+                            style={mapContainerStyle}
+                            gestureHandling="greedy"
+
+                        >
+                          <Marker position={coordinates} />
+                          <LocationButton />
+                        </Map>
+                      </APIProvider>
+                    </div>
+
+                    {addressData && !addressData.error && (
+                        <div className="address-form">
+                          <h3>Address Details</h3>
+
+                          {addressData.formattedAddress && (
+                              <div className="full-address-display">
+                                <p>{addressData.formattedAddress}</p>
+                              </div>
+                          )}
+
+                          <div className="address-form-grid">
+                            <div className="form-group">
+                              <label>Street</label>
+                              <p className="form-value">{addressData.street}</p>
+                            </div>
+
+                            <div className="form-group">
+                              <label>Neighborhood</label>
+                              <p className="form-value">{addressData.neighborhood}</p>
+                            </div>
+
+                            <div className="form-group">
+                              <label>District</label>
+                              <p className="form-value">{addressData.district}</p>
+                            </div>
+
+                            <div className="form-group">
+                              <label>Province</label>
+                              <p className="form-value">{addressData.province}</p>
+                            </div>
+
+                            <div className="form-group">
+                              <label>Country</label>
+                              <p className="form-value">{addressData.country}</p>
+                            </div>
+
+                            <div className="form-group">
+                              <label>Postal Code</label>
+                              <p className="form-value">{addressData.postalCode}</p>
+                            </div>
+                          </div>
+
+                          <div className="row mt-4">
+                            <div className="col-md-6">
+                              <div className="form-group">
+                                <label>Apartment No (Optional)</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    value={apartmentNo || ""}
+                                    onChange={(e) => {
+                                      setApartmentNo(e.target.value);
+                                      setAddressData({
+                                        ...addressData,
+                                        apartmentNo: e.target.value,
+                                      });
+                                    }}
+                                    placeholder="Enter apartment number"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="col-md-6">
+                              <div className="form-group">
+                                <label>Door No (Optional)</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    value={doorNo || ""}
+                                    onChange={(e) => {
+                                      setDoorNo(e.target.value);
+                                      setAddressData({
+                                        ...addressData,
+                                        doorNo: e.target.value,
+                                      });
+                                    }}
+                                    placeholder="Enter door number"
+                                />
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="save-address-container">
+                            <button
+                                className="save-address-btn"
+                                onClick={saveAddress}
+                                disabled={addressLoading}
+                            >
+                              {addressLoading ? (
+                                  <>
+                                    <span className="spinner"></span>
+                                    <span>Saving...</span>
+                                  </>
+                              ) : (
+                                  <>
+                                    <i className="bi bi-check2-circle"></i>
+                                    <span>Save Address</span>
+                                  </>
+                              )}
+                            </button>
+                          </div>
+                        </div>
+                    )}
+
+                    {addressData && addressData.error && (
+                        <div className="error-alert">
+                          <i className="bi bi-exclamation-triangle"></i>
+                          <span>{addressData.error}</span>
                         </div>
                     )}
                   </div>
-
-                  <div className="address-list">
-                    {addresses.map((address) => (
-                        <div
-                            className={`address-card ${selectedAddressId === address.id ? 'selected' : ''}`}
-                            key={address.id}
-                            onClick={() => selectAddress(address.id)}
-                        >
-                          <div className="address-card-content">
-                            <div className="address-card-header">
-                              <h4>{address.title}</h4>
-                              {address.is_primary && <span className="primary-badge">Primary</span>}
-                            </div>
-                            <div className="address-card-body">
-                              <p>{address.street}, {address.neighborhood}</p>
-                              <p>{address.district}, {address.province}</p>
-                              <p>{address.country}, {address.postalCode}</p>
-                              {(address.apartmentNo || address.doorNo) && (
-                                  <p className="address-details">
-                                    {address.apartmentNo && `Apt ${address.apartmentNo}`}
-                                    {address.apartmentNo && address.doorNo && ', '}
-                                    {address.doorNo && `Door ${address.doorNo}`}
-                                  </p>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                    ))}
-                  </div>
                 </div>
-              </div>
-
-              {/* Map and Address Form */}
-              <div className="col-lg-8">
-                <div className="map-container">
-                  <div className="map-instructions">
-                    <i className="bi bi-geo-alt"></i>
-                    <span>Click anywhere on the map to set your address</span>
-                  </div>
-
-                  <APIProvider apiKey={apiKey}>
-                    <Map
-                        center={coordinates}
-                        zoom={15}
-                        mapId={"YOUR_MAP_ID"}
-                        onClick={handleClick}
-                        onLoad={handleMapLoad}
-                        style={mapContainerStyle}
-                        gestureHandling="greedy"
-                        disableDefaultUI={false}
-                        scrollwheel={true}
-                        zoomControl={true}
-                        fullscreenControl={true}
-                        streetViewControl={false}
-                        mapTypeControl={true}
-                        mapTypeControlOptions={{
-                          position: 3, // RIGHT_TOP
-                          style: 1 // DROPDOWN_MENU
-                        }}
-                    >
-                      <Marker position={coordinates} />
-                      <LocationButton />
-                    </Map>
-                  </APIProvider>
-                </div>
-
-                {addressData && !addressData.error && (
-                    <div className="address-form">
-                      <h3>Address Details</h3>
-
-                      {addressData.formattedAddress && (
-                          <div className="full-address-display">
-                            <p>{addressData.formattedAddress}</p>
-                          </div>
-                      )}
-
-                      <div className="address-form-grid">
-                        <div className="form-group">
-                          <label>Street</label>
-                          <p className="form-value">{addressData.street}</p>
-                        </div>
-
-                        <div className="form-group">
-                          <label>Neighborhood</label>
-                          <p className="form-value">{addressData.neighborhood}</p>
-                        </div>
-
-                        <div className="form-group">
-                          <label>District</label>
-                          <p className="form-value">{addressData.district}</p>
-                        </div>
-
-                        <div className="form-group">
-                          <label>Province</label>
-                          <p className="form-value">{addressData.province}</p>
-                        </div>
-
-                        <div className="form-group">
-                          <label>Country</label>
-                          <p className="form-value">{addressData.country}</p>
-                        </div>
-
-                        <div className="form-group">
-                          <label>Postal Code</label>
-                          <p className="form-value">{addressData.postalCode}</p>
-                        </div>
-                      </div>
-
-                      <div className="row mt-4">
-                        <div className="col-md-6">
-                          <div className="form-group">
-                            <label>Apartment No (Optional)</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                value={apartmentNo || ""}
-                                onChange={(e) => {
-                                  setApartmentNo(e.target.value);
-                                  setAddressData({
-                                    ...addressData,
-                                    apartmentNo: e.target.value,
-                                  });
-                                }}
-                                placeholder="Enter apartment number"
-                            />
-                          </div>
-                        </div>
-
-                        <div className="col-md-6">
-                          <div className="form-group">
-                            <label>Door No (Optional)</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                value={doorNo || ""}
-                                onChange={(e) => {
-                                  setDoorNo(e.target.value);
-                                  setAddressData({
-                                    ...addressData,
-                                    doorNo: e.target.value,
-                                  });
-                                }}
-                                placeholder="Enter door number"
-                            />
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="save-address-container">
-                        <button
-                            className="save-address-btn"
-                            onClick={saveAddress}
-                            disabled={addressLoading}
-                        >
-                          {addressLoading ? (
-                              <>
-                                <span className="spinner"></span>
-                                <span>Saving...</span>
-                              </>
-                          ) : (
-                              <>
-                                <i className="bi bi-check2-circle"></i>
-                                <span>Save Address</span>
-                              </>
-                          )}
-                        </button>
-                      </div>
-                    </div>
-                )}
-
-                {addressData && addressData.error && (
-                    <div className="error-alert">
-                      <i className="bi bi-exclamation-triangle"></i>
-                      <span>{addressData.error}</span>
-                    </div>
-                )}
               </div>
             </div>
-          </div>
-        </div>
 
-        <style jsx>{`
+            <style jsx>{`
           .address-selection-container {
             background-color: #f8f9fa;
             min-height: 100vh;
@@ -675,8 +672,8 @@ const AddressSelection = () => {
             gap: 0.5rem;
           }
         `}</style>
-      </div>
-  );
-};
+          </div>
+          );
+          };
 
-export default AddressSelection;
+          export default AddressSelection;
